@@ -18,16 +18,7 @@ public class NettyChannel implements TransportChannel {
 	private static Map<Channel, NettyChannel> channelCache = Maps.newConcurrentMap();
 
 	public static NettyChannel getInstance(Channel channel) {
-		NettyChannel instance = channelCache.get(channel);
-		
-		if (instance != null) {
-			return instance;
-		}
-		
-		NettyChannel newInstance = new NettyChannel();
-		instance = channelCache.putIfAbsent(channel, newInstance);
-		
-		return instance == null ? newInstance : instance;
+	    return channelCache.computeIfAbsent(channel, key -> new NettyChannel());
 	}
 	
 	@Override

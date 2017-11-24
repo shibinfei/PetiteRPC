@@ -9,7 +9,6 @@ import com.google.common.collect.Maps;
 import io.hahahahaha.petiterpc.common.Request;
 import io.hahahahaha.petiterpc.common.Response;
 import io.hahahahaha.petiterpc.transport.TransportChannel;
-import server.ProviderContainer;
 
 /**
  * @author shibinfei

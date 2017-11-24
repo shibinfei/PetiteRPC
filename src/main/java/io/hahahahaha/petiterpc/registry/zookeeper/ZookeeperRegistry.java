@@ -158,7 +158,6 @@ public class ZookeeperRegistry implements Registry {
 		if (pathChildrenCache != null) {
 			return;
 		}
-
 		/*
 		 * 噪音结束
 		 */

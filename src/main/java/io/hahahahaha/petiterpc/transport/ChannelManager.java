@@ -36,21 +36,7 @@ public enum ChannelManager {
 	 * @return
 	 */
 	public CopyOnWriteArrayList<AddressChannelList> lookup(Class<?> serviceClass) {
-		
-		CopyOnWriteArrayList<AddressChannelList> list = serviceChannelListMapping.get(serviceClass);
-		
-		if (list != null) {
-			return list;
-		}
-		
-		CopyOnWriteArrayList<AddressChannelList> newList = Lists.newCopyOnWriteArrayList();
-		list = serviceChannelListMapping.putIfAbsent(serviceClass, newList);
-		
-		if (list == null) {
-			return newList;
-		}
-		
-		return list;
+	    return serviceChannelListMapping.computeIfAbsent(serviceClass, key -> Lists.newCopyOnWriteArrayList());
 	}
 	
 	

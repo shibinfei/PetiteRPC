@@ -1,4 +1,4 @@
-package server;
+package io.hahahahaha.petiterpc.server;
 
 import io.hahahahaha.petiterpc.registry.Registry;
 
