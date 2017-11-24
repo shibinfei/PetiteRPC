@@ -17,7 +17,19 @@ public class Request implements Codable {
 
 	private String interfaceName;
 	
-	private String methodName;
+	private Class<?> interfaceClass;
+	
+	
+	
+	public Class<?> getInterfaceClass() {
+        return interfaceClass;
+    }
+
+    public void setInterfaceClass(Class<?> interfaceClass) {
+        this.interfaceClass = interfaceClass;
+    }
+
+    private String methodName;
 	
 	private Object[] args;
 	
