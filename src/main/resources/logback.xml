@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <Encoding>utf-8</Encoding>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>
+                [%d{yyyy-MM-dd HH:mm:ss.SSS} %p] %c{1} - %msg%n
+            </pattern>
+        </layout>
+    </appender>
+
+    <logger name="org.springframework">
+        <level value="WARN" />
+    </logger>
+    <logger name="com.zhenai">
+        <level value="DEBUG" />
+    </logger>
+    <root>
+        <level value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>
