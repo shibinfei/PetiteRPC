@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.hahahahaha.petiterpc.common.Request;
-import io.hahahahaha.petiterpc.server.RequestTask;
+import io.hahahahaha.petiterpc.server.ServerMediator;
 import io.hahahahaha.petiterpc.transport.TransportChannel;
 import io.hahahahaha.petiterpc.transport.netty.NettyChannel;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,7 +16,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
-    ExecutorService threadPool = Executors.newFixedThreadPool(4);   
+    private ServerMediator serverMediator;
+    
+    private ExecutorService threadPool = Executors.newFixedThreadPool(4);
     
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -28,10 +30,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         Request request = (Request) msg;
         TransportChannel transportChannel = NettyChannel.getInstance(ctx.channel());
         
-        RequestTask serverTask = new RequestTask(transportChannel, request);
-        threadPool.execute(serverTask);
-        
-        super.channelRead(ctx, msg);
+        threadPool.execute(() -> serverMediator.handleRequest(transportChannel, request));
     }
     
 }
