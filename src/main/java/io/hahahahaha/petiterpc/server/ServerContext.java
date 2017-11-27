@@ -63,9 +63,10 @@ public class ServerContext {
             if (interfaces == null || interfaces.length == 0) {
                 throw new RuntimeException("Must implement interface");
             }
-            registry.register(new Registration(NetUtils.getLocalAddress(), port, interfaces[0].getName()));
+            
             Object providerInstance = objenesis.newInstance(clazz);
             providerContainer.register(interfaces[0], providerInstance);
+            registry.register(new Registration(NetUtils.getLocalAddress(), port, interfaces[0].getName()));
         }
         
     }
