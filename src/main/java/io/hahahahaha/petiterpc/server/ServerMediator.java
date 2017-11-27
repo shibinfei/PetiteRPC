@@ -36,7 +36,7 @@ public class ServerMediator {
         
         try {
             MethodAccess methodAccess = methodAccessCache.computeIfAbsent(interfaceClass, key -> MethodAccess.get(key));
-            Object result = methodAccess.invoke(providerInstance, request.getMethodName(), request.getArgs());  // TODO 更多优化空间
+            Object result = methodAccess.invoke(providerInstance, request.getMethodName(), request.getArgs());
             response.setResult(result);
         } catch (Throwable t) {
             response.setResult(t);

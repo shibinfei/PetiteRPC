@@ -9,6 +9,9 @@ import org.objenesis.ObjenesisStd;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
 
+import io.hahahahaha.petiterpc.common.Provider;
+import io.hahahahaha.petiterpc.common.utils.NetUtils;
+import io.hahahahaha.petiterpc.registry.Registration;
 import io.hahahahaha.petiterpc.registry.Registry;
 import io.hahahahaha.petiterpc.transport.Acceptor;
 
@@ -22,9 +25,11 @@ public class ServerContext {
     
     private Acceptor acceptor;
     
-    private ProviderContainer providerContainer;
+    private ProviderContainer providerContainer = new ProviderContainer();
     
     private String basePackage;
+    
+    private int port;
     
     private static final Objenesis objenesis = new ObjenesisStd(true);
     
@@ -32,9 +37,9 @@ public class ServerContext {
      * 启动服务端上下文
      */
     public void start() {
-        acceptor.bind(8888);
         registry.connect();
         initProviders();
+        acceptor.bind(port);
     }
     
     private void initProviders() {
@@ -48,15 +53,61 @@ public class ServerContext {
         Set<ClassInfo> classInfos = classPath.getTopLevelClassesRecursive(basePackage);
         
         for (ClassInfo classInfo : classInfos) {
-            Class<?> clazz = classInfo.getClass();
             
-            Class<?> superclass = clazz.getSuperclass();
-            if (!superclass.isInterface()) {
+            Class<?> clazz = classInfo.load();
+            if (clazz.getAnnotation(Provider.class) == null) {
+                continue;
+            }
+            
+            Class<?>[] interfaces = clazz.getInterfaces();
+            if (interfaces == null || interfaces.length == 0) {
                 throw new RuntimeException("Must implement interface");
             }
-            providerContainer.register(superclass, objenesis.newInstance(clazz));
+            registry.register(new Registration(NetUtils.getLocalAddress(), port, interfaces[0].getName()));
+            Object providerInstance = objenesis.newInstance(clazz);
+            providerContainer.register(interfaces[0], providerInstance);
         }
         
+    }
+
+    public Registry getRegistry() {
+        return registry;
+    }
+
+    public void setRegistry(Registry registry) {
+        this.registry = registry;
+    }
+
+    public Acceptor getAcceptor() {
+        return acceptor;
+    }
+
+    public void setAcceptor(Acceptor acceptor) {
+        this.acceptor = acceptor;
+    }
+
+    public ProviderContainer getProviderContainer() {
+        return providerContainer;
+    }
+
+    public void setProviderContainer(ProviderContainer providerContainer) {
+        this.providerContainer = providerContainer;
+    }
+
+    public String getBasePackage() {
+        return basePackage;
+    }
+
+    public void setBasePackage(String basePackage) {
+        this.basePackage = basePackage;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
     
     
