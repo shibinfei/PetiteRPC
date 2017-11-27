@@ -37,7 +37,7 @@ public class ConsumerContext {
 	 * @return
 	 */
 	public <T> T getService(Class<T> clazz) {
-	    InvocationHandler invocationHandler = new JDKProxy(new RoundRobinLoadBalancer(), new ProtostuffSerializer());
+	    InvocationHandler invocationHandler = new JDKProxy(new RoundRobinLoadBalancer(), new ProtostuffSerializer(), clazz);
 	    Object object = Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[] { clazz }, invocationHandler);
         return clazz.cast(object);
 	}

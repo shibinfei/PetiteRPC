@@ -31,7 +31,7 @@ public class ClientContext {
 		for (Class<?> clazz : interfaces) {
 			ConnectionWatcher connectionWatcher = new ConnectionWatcher(clazz, registry);
 			connectionWatcher.setConnector(connector);
-			connectionWatcher.establishConnection();
+			connectionWatcher.start();
 		}
 	}
 	
@@ -39,7 +39,7 @@ public class ClientContext {
 	public <T> T getService(Class<T> clazz) {
 	    Serializer serializer = new ProtostuffSerializer();
 	    LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
-	    JDKProxy proxy = new JDKProxy(loadBalancer, serializer);
+	    JDKProxy proxy = new JDKProxy(loadBalancer, serializer, clazz);
 	    Object object = Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[] { clazz }, proxy);
         return clazz.cast(object);
 	}

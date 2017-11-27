@@ -26,9 +26,10 @@ public class JDKProxy implements InvocationHandler {
 	
 	private Serializer serializer;
 	
-	public JDKProxy(LoadBalancer loadBalancer, Serializer serializer) {
+	public JDKProxy(LoadBalancer loadBalancer, Serializer serializer, Class<?> interfaceClass) {
 	    this.loadBalancer = loadBalancer;
 	    this.serializer = serializer;
+	    this.interfaceClass = interfaceClass;
 	}
 	
 	@Override
