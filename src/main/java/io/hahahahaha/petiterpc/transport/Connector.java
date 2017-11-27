@@ -1,6 +1,4 @@
-package io.hahahahaha.petiterpc.transport.netty.client;
-
-import io.hahahahaha.petiterpc.transport.Connection;
+package io.hahahahaha.petiterpc.transport;
 
 /**
  * @author shibinfei

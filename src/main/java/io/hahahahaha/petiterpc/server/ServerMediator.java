@@ -16,7 +16,7 @@ import io.hahahahaha.petiterpc.transport.TransportChannel;
  */
 public class ServerMediator {
 
-    ProviderContainer providerContainer;
+    private ProviderContainer providerContainer;
     
     public void handleRequest(TransportChannel channel, Request request) {
 

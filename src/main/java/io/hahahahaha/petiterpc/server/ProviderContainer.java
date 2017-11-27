@@ -12,7 +12,7 @@ public class ProviderContainer {
 
     private ConcurrentMap<Class<?>, Object> providerCache = Maps.newConcurrentMap();
     
-    public void register(Object provider) {
+    public void register(Class<?> interfaceClass, Object provider) {
         providerCache.put(provider.getClass(), provider);
     }
     

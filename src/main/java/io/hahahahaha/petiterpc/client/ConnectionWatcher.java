@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import io.hahahahaha.petiterpc.registry.Registration;
 import io.hahahahaha.petiterpc.registry.Registry;
 import io.hahahahaha.petiterpc.registry.RegistryListener;
-import io.hahahahaha.petiterpc.transport.netty.client.Connector;
+import io.hahahahaha.petiterpc.transport.Connector;
 
 /**
  * @author shibinfei
