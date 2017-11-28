@@ -3,7 +3,10 @@ package io.hahahahaha.petiterpc.transport.netty.client;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
+import io.hahahahaha.petiterpc.common.Address;
 import io.hahahahaha.petiterpc.serialization.Serializer;
+import io.hahahahaha.petiterpc.transport.AddressChannelList;
+import io.hahahahaha.petiterpc.transport.ChannelManager;
 import io.hahahahaha.petiterpc.transport.Connection;
 import io.hahahahaha.petiterpc.transport.Connector;
 import io.hahahahaha.petiterpc.transport.netty.Decoder;
@@ -12,6 +15,7 @@ import io.hahahahaha.petiterpc.transport.netty.NettyConnection;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -40,16 +44,18 @@ public class NettyConnector implements Connector {
 	
 	
 	@Override
-	public Connection connect(String host, int port) {
+	public Connection connect(Address address, Runnable successEvent) {
 		Bootstrap bootstrap = bootstrap();
-		final SocketAddress socketAddress = InetSocketAddress.createUnresolved(host, port);	
+		final SocketAddress socketAddress = InetSocketAddress.createUnresolved(address.getHost(), address.getPort());	
+		
+		AddressChannelList channelList = ChannelManager.getInstance().getByAddress(address);
 		
 		bootstrap.handler(new ChannelInitializer<Channel>() {
 
 			@Override
 			protected void initChannel(Channel ch) throws Exception {
 				ch.pipeline()
-				.addLast(new ClientHandler())
+				.addLast(new ClientHandler(channelList))
 				.addLast(new Encoder(serializer))
 				.addLast(new Decoder(serializer));
 			}
@@ -57,6 +63,15 @@ public class NettyConnector implements Connector {
 		});
 		
 		ChannelFuture connectChannelFuture = bootstrap.connect(socketAddress);
+		connectChannelFuture.addListener(new ChannelFutureListener() {
+            
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (future.isSuccess()) {
+                    successEvent.run();
+                }
+            }
+        });
 		return new NettyConnection(connectChannelFuture);
 	}
 

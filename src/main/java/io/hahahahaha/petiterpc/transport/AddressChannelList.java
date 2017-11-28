@@ -4,9 +4,8 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.google.common.collect.Lists;
-
 import io.hahahahaha.petiterpc.common.Address;
+import io.netty.channel.Channel;
 
 /**
  * @author shibinfei
@@ -16,7 +15,7 @@ public class AddressChannelList {
 
 	private Address address;
 	
-	private CopyOnWriteArrayList<TransportChannel> channels = Lists.newCopyOnWriteArrayList();
+	private CopyOnWriteArrayList<TransportChannel> channels;
 
 	private AtomicInteger index = new AtomicInteger(0);
 	
@@ -37,6 +36,18 @@ public class AddressChannelList {
 	public TransportChannel next() {
 	    int _index = index.getAndIncrement() & Integer.MAX_VALUE;
 	    return channels.get(_index % channels.size());
+	}
+	
+	public boolean isEmpty() {
+	    return channels.isEmpty();
+	}
+	
+	public void add(TransportChannel channel) {
+	    this.channels.add(channel);
+	}
+	
+	public void remove(TransportChannel channel) {
+	    this.channels.remove(channel);
 	}
 	
 }

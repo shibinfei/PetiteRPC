@@ -12,9 +12,9 @@ public class Address {
 
     private String host;
 
-    private String port;
+    private int port;
 
-    public Address(String host, String port) {
+    public Address(String host, int port) {
         super();
         this.host = host;
         this.port = port;
@@ -28,11 +28,11 @@ public class Address {
         this.host = host;
     }
 
-    public String getPort() {
+    public int getPort() {
         return port;
     }
 
-    public void setPort(String port) {
+    public void setPort(int port) {
         this.port = port;
     }
 

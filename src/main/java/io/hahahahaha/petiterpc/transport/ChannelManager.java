@@ -41,7 +41,7 @@ public enum ChannelManager {
 	
 	
 	/**
-	 * 建立服务和Channel组的映射
+	 * 建立服务和Channel组的映射    
 	 * @param serviceClass
 	 * @param addressChannelList
 	 * @return
@@ -51,4 +51,12 @@ public enum ChannelManager {
 		return list.addIfAbsent(addressChannelList);
 	}
 	
+	/**
+	 * 根据地址获取对应的Channel组
+	 * @param address
+	 * @return
+	 */
+	public AddressChannelList getByAddress(Address address) {
+	    return addressChannelListMapping.computeIfAbsent(address, key -> new AddressChannelList(address, Lists.newCopyOnWriteArrayList()));
+	}
 }

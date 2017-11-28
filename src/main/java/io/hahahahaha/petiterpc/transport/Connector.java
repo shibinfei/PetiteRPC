@@ -1,5 +1,7 @@
 package io.hahahahaha.petiterpc.transport;
 
+import io.hahahahaha.petiterpc.common.Address;
+
 /**
  * @author shibinfei
  *
@@ -12,7 +14,7 @@ public interface Connector {
 	 * @param port
 	 * @return
 	 */
-	Connection connect(String host, int port);
+	Connection connect(Address address, Runnable successEvent);
 	
 
 	boolean isServiceAvaiable(Class<?> interfaceName);
