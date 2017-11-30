@@ -80,12 +80,4 @@ public class NettyConnector implements Connector {
 		
 	}
 
-	@Override
-	public boolean isServiceAvaiable(Class<?> interfaceName) {
-		
-	    
-	    
-		return false;
-	}
-
 }

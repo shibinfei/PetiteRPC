@@ -49,7 +49,7 @@ public class ConnectionWatcher {
         if (signalNeeded) {
             lock.lock();
             try {
-                condition.notifyAll();
+                condition.signalAll();
             } finally {
                 lock.unlock();
             }
@@ -79,6 +79,7 @@ public class ConnectionWatcher {
                     };
 
                     Connection connection = connector.connect(address, successEvent);
+                    
                 }
 
                 channelManager.manage(interfaceClass, addressChannelList);
@@ -102,11 +103,11 @@ public class ConnectionWatcher {
         lock.lock();
 
         try {
-            if (!connector.isServiceAvaiable(interfaceClass)) {
+            if (!channelManager.isServiceAvaiable(interfaceClass)) {
                 condition.await(3, TimeUnit.SECONDS); // 写死, 等待时间3S.
-
+                
                 // 如果被notify, 但是还是没有服务, 抛出异常
-                if (!connector.isServiceAvaiable(interfaceClass)) {
+                if (!channelManager.isServiceAvaiable(interfaceClass)) {
                     throw new RuntimeException("Wait time out for service [" + interfaceClass.getName() + "]");
                 }
 

@@ -17,8 +17,6 @@ public interface Connector {
 	Connection connect(Address address, Runnable successEvent);
 	
 
-	boolean isServiceAvaiable(Class<?> interfaceName);
-	
 	
 	void shutdownGracefully();
 }

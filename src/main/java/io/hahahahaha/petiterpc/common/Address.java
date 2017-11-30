@@ -49,4 +49,10 @@ public class Address {
         Address other = (Address) obj;
         return new EqualsBuilder().append(host, other.host).append(port, other.port).isEquals();
     }
+
+    @Override
+    public String toString() {
+        return "Address [host=" + host + ", port=" + port + "]";
+    }
+    
 }
