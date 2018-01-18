@@ -9,6 +9,8 @@ import com.google.common.collect.Maps;
 
 import io.hahahahaha.petiterpc.transport.TransportChannel;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 
 /**
  * @author shibinfei
@@ -30,7 +32,15 @@ public class NettyChannel implements TransportChannel {
 	
 	@Override
 	public void write(Object msg) {
-		channel.write(msg);
+		channel.writeAndFlush(msg).addListener(new ChannelFutureListener() {
+			
+			@Override
+			public void operationComplete(ChannelFuture future) throws Exception {
+				if (!future.isSuccess()) {
+					future.cause().printStackTrace();
+				}
+			}
+		});
 	}
 	
 	@Override

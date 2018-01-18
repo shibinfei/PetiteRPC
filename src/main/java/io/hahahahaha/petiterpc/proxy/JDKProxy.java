@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import io.hahahahaha.petiterpc.client.ClientFuture;
 import io.hahahahaha.petiterpc.common.Request;
 import io.hahahahaha.petiterpc.loadbalancer.LoadBalancer;
-import io.hahahahaha.petiterpc.serialization.Serializer;
 import io.hahahahaha.petiterpc.transport.AddressChannelList;
 import io.hahahahaha.petiterpc.transport.ChannelManager;
 import io.hahahahaha.petiterpc.transport.TransportChannel;
@@ -24,11 +23,8 @@ public class JDKProxy implements InvocationHandler {
 	
 	private LoadBalancer loadBalancer;
 	
-	private Serializer serializer;
-	
-	public JDKProxy(LoadBalancer loadBalancer, Serializer serializer, Class<?> interfaceClass) {
+	public JDKProxy(LoadBalancer loadBalancer, Class<?> interfaceClass) {
 	    this.loadBalancer = loadBalancer;
-	    this.serializer = serializer;
 	    this.interfaceClass = interfaceClass;
 	}
 	
@@ -47,8 +43,7 @@ public class JDKProxy implements InvocationHandler {
 		request.setMethodName(method.getName());
 		request.setArgs(args);
 		
-		byte[] requestBytes = serializer.serialize(request);
-		channel.write(requestBytes);
+		channel.write(request);
 		
 		ClientFuture<?> future = new ClientFuture<>(method, args, request.getRequestId());
 		return future.get(3, TimeUnit.SECONDS); // fixed timeout

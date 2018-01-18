@@ -8,8 +8,6 @@ import io.hahahahaha.petiterpc.loadbalancer.LoadBalancer;
 import io.hahahahaha.petiterpc.loadbalancer.RoundRobinLoadBalancer;
 import io.hahahahaha.petiterpc.proxy.JDKProxy;
 import io.hahahahaha.petiterpc.registry.Registry;
-import io.hahahahaha.petiterpc.serialization.Serializer;
-import io.hahahahaha.petiterpc.serialization.protostuff.ProtostuffSerializer;
 import io.hahahahaha.petiterpc.transport.Connector;
 import io.hahahahaha.petiterpc.transport.netty.client.NettyConnector;
 
@@ -37,9 +35,8 @@ public class ClientContext {
 	
 	
 	public <T> T getService(Class<T> clazz) {
-	    Serializer serializer = new ProtostuffSerializer();
 	    LoadBalancer loadBalancer = new RoundRobinLoadBalancer();
-	    JDKProxy proxy = new JDKProxy(loadBalancer, serializer, clazz);
+	    JDKProxy proxy = new JDKProxy(loadBalancer, clazz);
 	    Object object = Proxy.newProxyInstance(clazz.getClassLoader(), new Class<?>[] { clazz }, proxy);
         return clazz.cast(object);
 	}
