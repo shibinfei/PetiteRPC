@@ -5,6 +5,7 @@ import java.net.SocketAddress;
 
 import io.hahahahaha.petiterpc.common.Address;
 import io.hahahahaha.petiterpc.serialization.Serializer;
+import io.hahahahaha.petiterpc.serialization.protostuff.ProtostuffSerializer;
 import io.hahahahaha.petiterpc.transport.AddressChannelList;
 import io.hahahahaha.petiterpc.transport.ChannelManager;
 import io.hahahahaha.petiterpc.transport.Connection;
@@ -29,7 +30,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
  */
 public class NettyConnector implements Connector {
 
-    private Serializer serializer;
+    private Serializer serializer = new ProtostuffSerializer();
     
 	public NettyConnector() {
 		
@@ -55,9 +56,9 @@ public class NettyConnector implements Connector {
 			@Override
 			protected void initChannel(Channel ch) throws Exception {
 				ch.pipeline()
-				.addLast(new ClientHandler(channelList))
 				.addLast(new Encoder(serializer))
-				.addLast(new Decoder(serializer));
+				.addLast(new Decoder(serializer))
+				.addLast(new ClientHandler(channelList));
 			}
 			
 		});

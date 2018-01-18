@@ -3,6 +3,7 @@ package io.hahahahaha.petiterpc.transport.netty.server;
 import java.net.InetSocketAddress;
 
 import io.hahahahaha.petiterpc.serialization.Serializer;
+import io.hahahahaha.petiterpc.serialization.protostuff.ProtostuffSerializer;
 import io.hahahahaha.petiterpc.transport.Acceptor;
 import io.hahahahaha.petiterpc.transport.netty.Decoder;
 import io.hahahahaha.petiterpc.transport.netty.Encoder;
@@ -19,7 +20,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 public class NettyAcceptor implements Acceptor {
 
-    private Serializer serializer;
+    private Serializer serializer = new ProtostuffSerializer();
     
     @Override
     public void bind(int port) {
