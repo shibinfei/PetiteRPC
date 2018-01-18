@@ -16,7 +16,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class ServerHandler extends ChannelInboundHandlerAdapter {
 
-    private ServerMediator serverMediator;
+    private ServerMediator serverMediator = new ServerMediator();
     
     private ExecutorService threadPool = Executors.newFixedThreadPool(4);
     
@@ -30,7 +30,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         Request request = (Request) msg;
         TransportChannel transportChannel = NettyChannel.getInstance(ctx.channel());
         
-        threadPool.execute(() -> serverMediator.handleRequest(transportChannel, request));
+        threadPool.execute(new Runnable() {
+			
+			@Override
+			public void run() {
+				serverMediator.handleRequest(transportChannel, request);
+			}
+		});
     }
     
 }

@@ -39,7 +39,7 @@ public class JDKProxy implements InvocationHandler {
 	    TransportChannel channel = addressChannelList.next();
 
 	    Request request = new Request();
-		request.setInterfaceName(interfaceClass.getName());
+		request.setInterfaceClass(interfaceClass);
 		request.setMethodName(method.getName());
 		request.setArgs(args);
 		

@@ -25,7 +25,7 @@ public class ServerContext {
     
     private Acceptor acceptor;
     
-    private ProviderContainer providerContainer = new ProviderContainer();
+    private ProviderContainer providerContainer = ProviderContainer.getInstance();
     
     private String basePackage;
     

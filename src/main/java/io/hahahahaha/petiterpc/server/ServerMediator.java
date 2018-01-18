@@ -16,7 +16,7 @@ import io.hahahahaha.petiterpc.transport.TransportChannel;
  */
 public class ServerMediator {
 
-    private ProviderContainer providerContainer;
+    private ProviderContainer providerContainer = ProviderContainer.getInstance();
     
     public void handleRequest(TransportChannel channel, Request request) {
 
@@ -29,7 +29,7 @@ public class ServerMediator {
         Object providerInstance = providerContainer.getProvider(interfaceClass);
         
         if (providerInstance == null) {
-            response.setResult(new ProviderNotFoundException("No Provider For " + request.getInterfaceName()));
+            response.setResult(new ProviderNotFoundException("No Provider For " + request.getClass().getName()));
             channel.write(response);
             return;
         }

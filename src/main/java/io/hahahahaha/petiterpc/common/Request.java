@@ -15,11 +15,7 @@ public class Request implements Codable {
 	 */
 	private static final long serialVersionUID = 843605030770777318L;
 
-	private String interfaceName;
-	
 	private Class<?> interfaceClass;
-	
-	
 	
 	public Class<?> getInterfaceClass() {
         return interfaceClass;
@@ -40,14 +36,6 @@ public class Request implements Codable {
 	public Request() {
 		super();
 		this.requestId = REQUEST_ID_GENERATOR.incrementAndGet();	// 溢出也没关系
-	}
-
-	public String getInterfaceName() {
-		return interfaceName;
-	}
-
-	public void setInterfaceName(String interfaceName) {
-		this.interfaceName = interfaceName;
 	}
 
 	public String getMethodName() {
@@ -74,13 +62,14 @@ public class Request implements Codable {
 		this.requestId = requestId;
 	}
 
-	@Override
+
+    @Override
 	public String toString() {
-		return "Request [interfaceName=" + interfaceName + ", methodName=" + methodName + ", args="
+		return "Request [interfaceClass=" + interfaceClass + ", methodName=" + methodName + ", args="
 				+ Arrays.toString(args) + ", requestId=" + requestId + "]";
 	}
 
-    @Override
+	@Override
     public Type getType() {
         return Type.REQUEST;
     }
