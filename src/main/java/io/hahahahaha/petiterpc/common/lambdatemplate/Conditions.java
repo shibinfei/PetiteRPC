@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.common.utils;
+package io.hahahahaha.petiterpc.common.lambdatemplate;
 
 import java.util.function.Supplier;
 
