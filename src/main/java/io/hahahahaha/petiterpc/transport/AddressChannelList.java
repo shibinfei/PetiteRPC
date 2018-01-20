@@ -1,13 +1,9 @@
 package io.hahahahaha.petiterpc.transport;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import io.hahahahaha.petiterpc.common.Address;
-import io.netty.channel.Channel;
+import io.hahahahaha.petiterpc.common.ReadWriteList;
 
 /**
  * @author shibinfei
@@ -17,11 +13,11 @@ public class AddressChannelList {
 
 	private Address address;
 	
-	private CopyOnWriteArrayList<TransportChannel> channels;
+	private ReadWriteList<TransportChannel> channels;
 
 	private AtomicInteger index = new AtomicInteger(0);
 	
-	public AddressChannelList(Address address, CopyOnWriteArrayList<TransportChannel> channels) {
+	public AddressChannelList(Address address, ReadWriteList<TransportChannel> channels) {
 		super();
 		this.address = address;
 		this.channels = channels;
@@ -31,7 +27,7 @@ public class AddressChannelList {
 		return address;
 	}
 	
-	public List<TransportChannel> getChannels() {
+	public ReadWriteList<TransportChannel> getChannels() {
 		return channels;
 	}
 	

@@ -2,6 +2,7 @@ package io.hahahahaha.petiterpc.transport.netty.client;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.util.function.Consumer;
 
 import io.hahahahaha.petiterpc.common.Address;
 import io.hahahahaha.petiterpc.serialization.Serializer;
@@ -10,8 +11,10 @@ import io.hahahahaha.petiterpc.transport.AddressChannelList;
 import io.hahahahaha.petiterpc.transport.ChannelManager;
 import io.hahahahaha.petiterpc.transport.Connection;
 import io.hahahahaha.petiterpc.transport.Connector;
+import io.hahahahaha.petiterpc.transport.TransportChannel;
 import io.hahahahaha.petiterpc.transport.netty.Decoder;
 import io.hahahahaha.petiterpc.transport.netty.Encoder;
+import io.hahahahaha.petiterpc.transport.netty.NettyChannel;
 import io.hahahahaha.petiterpc.transport.netty.NettyConnection;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -45,7 +48,7 @@ public class NettyConnector implements Connector {
 	
 	
 	@Override
-	public Connection connect(Address address, Runnable successEvent) {
+	public Connection connect(Address address, Consumer<TransportChannel> successEvent) {
 		Bootstrap bootstrap = bootstrap();
 		final SocketAddress socketAddress = InetSocketAddress.createUnresolved(address.getHost(), address.getPort());	
 		
@@ -69,7 +72,8 @@ public class NettyConnector implements Connector {
             @Override
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
-                    successEvent.run();
+                		TransportChannel transportChannel = NettyChannel.getInstance(future.channel());
+                		successEvent.accept(transportChannel);
                 }
             }
         });

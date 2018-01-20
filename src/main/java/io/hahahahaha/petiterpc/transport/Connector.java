@@ -1,5 +1,7 @@
 package io.hahahahaha.petiterpc.transport;
 
+import java.util.function.Consumer;
+
 import io.hahahahaha.petiterpc.common.Address;
 
 /**
@@ -14,7 +16,7 @@ public interface Connector {
 	 * @param port
 	 * @return
 	 */
-	Connection connect(Address address, Runnable successEvent);
+	Connection connect(Address address, Consumer<TransportChannel> successEvent);
 	
 
 	

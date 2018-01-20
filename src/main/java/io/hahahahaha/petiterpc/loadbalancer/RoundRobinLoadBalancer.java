@@ -1,8 +1,8 @@
 package io.hahahahaha.petiterpc.loadbalancer;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import io.hahahahaha.petiterpc.common.ReadWriteList;
 import io.hahahahaha.petiterpc.transport.AddressChannelList;
 
 /**
@@ -14,7 +14,7 @@ public class RoundRobinLoadBalancer implements LoadBalancer {
     private AtomicInteger counter = new AtomicInteger(0);
     
     @Override
-    public AddressChannelList select(List<AddressChannelList> addressChannelLists) {
+    public AddressChannelList select(ReadWriteList<AddressChannelList> addressChannelLists) {
         
         if (addressChannelLists == null || addressChannelLists.isEmpty()) {
             return null;

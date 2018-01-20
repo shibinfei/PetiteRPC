@@ -1,7 +1,6 @@
 package io.hahahahaha.petiterpc.loadbalancer;
 
-import java.util.List;
-
+import io.hahahahaha.petiterpc.common.ReadWriteList;
 import io.hahahahaha.petiterpc.transport.AddressChannelList;
 
 /**
@@ -15,6 +14,6 @@ public interface LoadBalancer {
      * @param addressChannelLists
      * @return
      */
-    AddressChannelList select(List<AddressChannelList> addressChannelLists);
+    AddressChannelList select(ReadWriteList<AddressChannelList> addressChannelLists);
     
 }

@@ -30,12 +30,6 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
     private AddressChannelList addressChannelList;
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        TransportChannel transportChannel = NettyChannel.getInstance(ctx.channel());
-        addressChannelList.add(transportChannel);
-    }
-    
-    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Response response = (Response) msg;
         Channel channel = ctx.channel();

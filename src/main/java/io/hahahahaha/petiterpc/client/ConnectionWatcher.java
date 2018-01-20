@@ -2,6 +2,7 @@ package io.hahahahaha.petiterpc.client;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import io.hahahahaha.petiterpc.common.Address;
 import io.hahahahaha.petiterpc.registry.Registration;
@@ -10,6 +11,7 @@ import io.hahahahaha.petiterpc.registry.RegistryListener;
 import io.hahahahaha.petiterpc.transport.AddressChannelList;
 import io.hahahahaha.petiterpc.transport.ChannelManager;
 import io.hahahahaha.petiterpc.transport.Connector;
+import io.hahahahaha.petiterpc.transport.TransportChannel;
 
 /**
  * @author shibinfei
@@ -55,7 +57,8 @@ public class ConnectionWatcher {
 
 				for (int i = 0; i < 5; i++) {
 
-					Runnable successEvent = () -> {
+					Consumer<TransportChannel> successEvent = transportChannel -> {
+						addressChannelList.add(transportChannel);
 						channelManager.manage(interfaceClass, addressChannelList);
 						countDownLatch.countDown();
 					};
@@ -63,7 +66,6 @@ public class ConnectionWatcher {
 					connector.connect(address, successEvent);	// Connection connection = 
 				}
 
-				channelManager.manage(interfaceClass, addressChannelList);
 				System.out.println("registryOnline" + registration.toString());
 			}
 
