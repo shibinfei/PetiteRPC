@@ -41,7 +41,6 @@ public enum ChannelManager {
 	
 	public boolean isServiceAvaiable(Class<?> serviceClass) {
 	    ReadWriteList<AddressChannelList> channelLists = lookup(serviceClass);
-	    System.out.println(channelLists);
 	    for (AddressChannelList l : channelLists) {
 	        if (!l.isEmpty()) {
 	            return true;
