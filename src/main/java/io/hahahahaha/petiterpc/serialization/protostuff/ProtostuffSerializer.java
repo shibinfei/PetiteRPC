@@ -15,6 +15,8 @@ public class ProtostuffSerializer implements Serializer {
 
 	private static ConcurrentHashMap<Class<?>, Schema<?>> schemaCache = new ConcurrentHashMap<>();
 	
+	private ThreadLocal<LinkedBuffer> bufferThreadLocal = ThreadLocal.withInitial(() -> LinkedBuffer.allocate());
+	
 	@SuppressWarnings("unchecked")
 	private <T> Schema<T> getSchema(Class<T> clazz) {
 		Schema<T> schema = (Schema<T>) schemaCache.get(clazz);
@@ -31,7 +33,7 @@ public class ProtostuffSerializer implements Serializer {
 	@SuppressWarnings("unchecked")
 	public <T> byte[] serialize(T object) {
 		Schema<T> schema = getSchema((Class<T>)object.getClass());
-		LinkedBuffer buffer = LinkedBuffer.allocate();
+		LinkedBuffer buffer = bufferThreadLocal.get();
 		byte[] bytes;
 		
 		try {
