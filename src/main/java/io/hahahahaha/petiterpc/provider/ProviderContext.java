@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.server;
+package io.hahahahaha.petiterpc.provider;
 
 import java.io.IOException;
 import java.util.Set;
@@ -19,7 +19,7 @@ import io.hahahahaha.petiterpc.transport.Acceptor;
  * @author shibinfei
  *
  */
-public class ServerContext {
+public class ProviderContext {
 
     private Registry registry;
     
@@ -45,7 +45,7 @@ public class ServerContext {
     private void initProviders() {
         ClassPath classPath;
         try {
-            classPath = ClassPath.from(ServerContext.class.getClassLoader());
+            classPath = ClassPath.from(ProviderContext.class.getClassLoader());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -110,6 +110,5 @@ public class ServerContext {
     public void setPort(int port) {
         this.port = port;
     }
-    
     
 }

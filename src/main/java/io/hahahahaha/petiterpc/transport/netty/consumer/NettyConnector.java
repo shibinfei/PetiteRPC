@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.transport.netty.client;
+package io.hahahahaha.petiterpc.transport.netty.consumer;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
@@ -7,8 +7,6 @@ import java.util.function.Consumer;
 import io.hahahahaha.petiterpc.common.Address;
 import io.hahahahaha.petiterpc.serialization.Serializer;
 import io.hahahahaha.petiterpc.serialization.protostuff.ProtostuffSerializer;
-import io.hahahahaha.petiterpc.transport.AddressChannelList;
-import io.hahahahaha.petiterpc.transport.ChannelManager;
 import io.hahahahaha.petiterpc.transport.Connection;
 import io.hahahahaha.petiterpc.transport.Connector;
 import io.hahahahaha.petiterpc.transport.TransportChannel;
@@ -52,8 +50,6 @@ public class NettyConnector implements Connector {
 		Bootstrap bootstrap = bootstrap();
 		final SocketAddress socketAddress = InetSocketAddress.createUnresolved(address.getHost(), address.getPort());	
 		
-		AddressChannelList channelList = ChannelManager.getInstance().getByAddress(address);
-		
 		bootstrap.handler(new ChannelInitializer<Channel>() {
 
 			@Override
@@ -61,7 +57,7 @@ public class NettyConnector implements Connector {
 				ch.pipeline()
 				.addLast(new Encoder(serializer))
 				.addLast(new Decoder(serializer))
-				.addLast(new ClientHandler(channelList));
+				.addLast(new ConsumerHandler());
 			}
 			
 		});

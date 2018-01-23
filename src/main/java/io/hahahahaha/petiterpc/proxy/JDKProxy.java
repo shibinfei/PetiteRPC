@@ -4,9 +4,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
-import io.hahahahaha.petiterpc.client.ClientFuture;
 import io.hahahahaha.petiterpc.common.ReadWriteList;
 import io.hahahahaha.petiterpc.common.Request;
+import io.hahahahaha.petiterpc.consumer.ConsumerFuture;
 import io.hahahahaha.petiterpc.loadbalancer.LoadBalancer;
 import io.hahahahaha.petiterpc.transport.AddressChannelList;
 import io.hahahahaha.petiterpc.transport.ChannelManager;
@@ -45,7 +45,7 @@ public class JDKProxy implements InvocationHandler {
 		
 		channel.write(request);
 		
-		ClientFuture<?> future = new ClientFuture<>(method, args, request.getRequestId());
+		ConsumerFuture<?> future = new ConsumerFuture<>(method, args, request.getRequestId());
 		return future.get(3, TimeUnit.SECONDS); // fixed timeout
 	}
 

@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.server;
+package io.hahahahaha.petiterpc.provider;
 
 import java.util.concurrent.ConcurrentMap;
 

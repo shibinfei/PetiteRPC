@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.client;
+package io.hahahahaha.petiterpc.consumer;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -9,13 +9,13 @@ import io.hahahahaha.petiterpc.loadbalancer.RoundRobinLoadBalancer;
 import io.hahahahaha.petiterpc.proxy.JDKProxy;
 import io.hahahahaha.petiterpc.registry.Registry;
 import io.hahahahaha.petiterpc.transport.Connector;
-import io.hahahahaha.petiterpc.transport.netty.client.NettyConnector;
+import io.hahahahaha.petiterpc.transport.netty.consumer.NettyConnector;
 
 /**
  * @author shibinfei
  *
  */
-public class ClientContext {
+public class ConsumerContext {
 
 	private Registry registry;
 	

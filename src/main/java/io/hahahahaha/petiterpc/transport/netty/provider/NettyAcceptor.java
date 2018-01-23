@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.transport.netty.server;
+package io.hahahahaha.petiterpc.transport.netty.provider;
 
 import java.net.InetSocketAddress;
 
@@ -33,7 +33,7 @@ public class NettyAcceptor implements Acceptor {
 
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
-                        ch.pipeline().addLast(new Encoder(serializer), new Decoder(serializer), new ServerHandler());
+                        ch.pipeline().addLast(new Encoder(serializer), new Decoder(serializer), new ProviderHandler());
                     }
                     
                 });

@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.client;
+package io.hahahahaha.petiterpc.consumer;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,18 +15,18 @@ import com.google.common.util.concurrent.AbstractFuture;
  * 
  * @author shibinfei
  */
-public final class ClientFuture<T> extends AbstractFuture<T> {
+public final class ConsumerFuture<T> extends AbstractFuture<T> {
 
-    public static ClientFuture<?> fromRequestId(long requestId) {
+    public static ConsumerFuture<?> fromRequestId(long requestId) {
         return futureCache.get(requestId);
     }
 
     @SuppressWarnings("unused")
     private long requestId;
 
-    private static ConcurrentMap<Long, ClientFuture<?>> futureCache = new ConcurrentHashMap<>();
+    private static ConcurrentMap<Long, ConsumerFuture<?>> futureCache = new ConcurrentHashMap<>();
 
-    public ClientFuture(Method method, Object[] args, long requestId) {
+    public ConsumerFuture(Method method, Object[] args, long requestId) {
         super();
         this.requestId = requestId;
         futureCache.put(requestId, this);

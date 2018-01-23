@@ -1,7 +1,6 @@
-package io.hahahahaha.petiterpc.client;
+package io.hahahahaha.petiterpc.consumer;
 
 import io.hahahahaha.petiterpc.common.Response;
-import io.hahahahaha.petiterpc.transport.TransportChannel;
 
 /**
  * @author shibinfei
@@ -9,18 +8,15 @@ import io.hahahahaha.petiterpc.transport.TransportChannel;
  */
 public class ResponseTask implements Runnable {
 
-	private final TransportChannel transportChannel;
-	
 	private final Response response;
 	
-	public ResponseTask(TransportChannel transportChannel, Response response) {
-		this.transportChannel = transportChannel;
+	public ResponseTask(Response response) {
 		this.response = response;
 	}
 
 	@Override
 	public void run() {
-		ClientFuture<?> clientFuture = ClientFuture.fromRequestId(response.getRequestId());
+		ConsumerFuture<?> clientFuture = ConsumerFuture.fromRequestId(response.getRequestId());
 		
 		if (response.getResult() instanceof Throwable) {
 		    clientFuture.setReturnException((Throwable)response.getResult());

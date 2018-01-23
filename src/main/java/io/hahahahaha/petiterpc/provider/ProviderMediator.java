@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.server;
+package io.hahahahaha.petiterpc.provider;
 
 import java.nio.file.ProviderNotFoundException;
 import java.util.concurrent.ConcurrentMap;
@@ -14,7 +14,7 @@ import io.hahahahaha.petiterpc.transport.TransportChannel;
  * @author shibinfei
  *
  */
-public class ServerMediator {
+public class ProviderMediator {
 
     private ProviderContainer providerContainer = ProviderContainer.getInstance();
     
@@ -34,8 +34,8 @@ public class ServerMediator {
             return;
         }
         
+        MethodAccess methodAccess = methodAccessCache.computeIfAbsent(interfaceClass, key -> MethodAccess.get(key));
         try {
-            MethodAccess methodAccess = methodAccessCache.computeIfAbsent(interfaceClass, key -> MethodAccess.get(key));
             Object result = methodAccess.invoke(providerInstance, request.getMethodName(), request.getArgs());
             response.setResult(result);
         } catch (Throwable t) {

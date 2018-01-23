@@ -1,4 +1,4 @@
-package io.hahahahaha.petiterpc.client;
+package io.hahahahaha.petiterpc.consumer;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;

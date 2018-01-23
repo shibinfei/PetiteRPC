@@ -2,14 +2,14 @@ package io.hahahahaha.petiterpc.test.provider;
 
 import java.util.concurrent.CountDownLatch;
 
+import io.hahahahaha.petiterpc.provider.ProviderContext;
 import io.hahahahaha.petiterpc.registry.zookeeper.ZookeeperRegistry;
-import io.hahahahaha.petiterpc.server.ServerContext;
-import io.hahahahaha.petiterpc.transport.netty.server.NettyAcceptor;
+import io.hahahahaha.petiterpc.transport.netty.provider.NettyAcceptor;
 
 public class ProviderServer {
 
 	public static void main(String[] args) throws InterruptedException {
-		ServerContext context = new ServerContext();
+		ProviderContext context = new ProviderContext();
 		context.setBasePackage("io.hahahahaha");
 		context.setAcceptor(new NettyAcceptor());
 		context.setPort(8765);
