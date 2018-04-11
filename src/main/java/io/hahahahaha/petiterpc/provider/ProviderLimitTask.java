@@ -75,7 +75,8 @@ public class ProviderLimitTask extends HystrixCommand<Void> {
         
         MethodAccess methodAccess = methodAccessCache.computeIfAbsent(interfaceClass, key -> MethodAccess.get(key));
         try {
-            Object result = methodAccess.invoke(providerInstance, request.getMethodName(), request.getArgs());
+        		int methodIndex = getMethodIndex(methodAccess);
+        		Object result = methodAccess.invoke(providerInstance, methodIndex, request.getArgs());
             response.setResult(result);
         } catch (Throwable t) {
             response.setResult(t);
@@ -105,7 +106,7 @@ public class ProviderLimitTask extends HystrixCommand<Void> {
         
         if (degradation) {
         		MethodAccess methodAccess = methodAccessCache.computeIfAbsent(request.getInterfaceClass(), key -> MethodAccess.get(key));
-        		response.setResult(getMockResult(methodAccess, request));
+        		response.setResult(getMockResult(methodAccess));
         } else {
         		response.setResult(new PetiteException("Call limited"));
         }
@@ -115,17 +116,13 @@ public class ProviderLimitTask extends HystrixCommand<Void> {
 	}
 	
 	
-	private Object getMockResult(MethodAccess methodAccess, Request request) {
+	private int getMethodIndex(MethodAccess methodAccess) {
+		return methodAccess.getIndex(request.getMethodName(), request.getArgTypes());
+	}
+	
+	private Object getMockResult(MethodAccess methodAccess) {
 		
-		
-		Object[] args = request.getArgs();
-		
-		int methodIndex;
-		if (args == null || args.length == 0) {
-			methodIndex = methodAccess.getIndex(request.getMethodName());
-		} else {
-			methodIndex = methodAccess.getIndex(request.getMethodName(), request.getArgTypes());
-		}
+		int methodIndex = getMethodIndex(methodAccess);
 		
 		Class<?> returnType = methodAccess.getReturnTypes()[methodIndex];
 		

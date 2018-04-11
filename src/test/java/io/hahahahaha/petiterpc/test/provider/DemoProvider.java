@@ -16,4 +16,25 @@ public class DemoProvider implements DemoInterface {
 		return "fuck";
 	}
 
+	@Override
+	public void testVoid() {
+		System.out.println("executing void function");
+	}
+
+	@Override
+	public void testOverload(String s) {
+		System.out.println("overload");
+	}
+
+	@Override
+	public int testOverload(String s, int i) {
+		System.out.println("overload2");
+		return 0;
+	}
+	
+	public long testOverload(String s, String i) {
+		System.out.println("overload2");
+		return 0;
+	}
+
 }

@@ -15,12 +15,13 @@ public class ConsumerDemo {
 		context.start();
 		
 		DemoInterface demo = context.getService(DemoInterface.class);
-		for (int i = 0; i < 20; i++) {
-			new Thread(() -> {
-				String result = demo.fuck("hahah");
-				System.out.println(result);
-			}).start();
-		}
+		demo.testOverload("ha", 1);
+		demo.testVoid();
+//		for (int i = 0; i < 20; i++) {
+//			new Thread(() -> {
+//				demo.testVoid();
+//			}).start();
+//		}
 		
 	}
 	
