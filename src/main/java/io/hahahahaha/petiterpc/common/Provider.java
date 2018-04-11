@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Provider {
 
-	int threadCoreSize();
+	int threadCoreSize() default 0;
 	
-	boolean degradation();
+	boolean degradation() default false;
 	
 }
