@@ -1,5 +1,9 @@
 package io.hahahahaha.petiterpc.provider;
 
+import java.util.concurrent.ConcurrentMap;
+
+import com.esotericsoftware.reflectasm.MethodAccess;
+import com.google.common.collect.Maps;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
@@ -8,14 +12,22 @@ import com.netflix.hystrix.HystrixCommandProperties.ExecutionIsolationStrategy;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
 
 import io.hahahahaha.petiterpc.common.PetiteException;
+import io.hahahahaha.petiterpc.common.Provider;
 import io.hahahahaha.petiterpc.common.Request;
 import io.hahahahaha.petiterpc.common.Response;
 import io.hahahahaha.petiterpc.transport.TransportChannel;
-
+/**
+ * 
+ * @author shibinfei
+ * TODO not support overload
+ * TODO not support void method
+ */
 public class ProviderLimitTask extends HystrixCommand<Void> {
 	
-    private ProviderMediator providerMediator = new ProviderMediator();
-    
+	private ConcurrentMap<Class<?>, MethodAccess> methodAccessCache = Maps.newConcurrentMap();
+	
+    private ProviderContainer providerContainer = ProviderContainer.getInstance();
+	
 	private Request request;
 
 	private TransportChannel channel;
@@ -27,6 +39,9 @@ public class ProviderLimitTask extends HystrixCommand<Void> {
 						.withExecutionTimeoutEnabled(true)
 						.withExecutionIsolationThreadInterruptOnTimeout(true)
 						.withCircuitBreakerEnabled(true)
+						.withCircuitBreakerRequestVolumeThreshold(5)
+						.withCircuitBreakerSleepWindowInMilliseconds(1000)
+						.withCircuitBreakerErrorThresholdPercentage(50)
 						)
 				.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter()
 						.withCoreSize(1)
@@ -44,17 +59,88 @@ public class ProviderLimitTask extends HystrixCommand<Void> {
 
 	@Override
 	protected Void run() throws Exception {
-		providerMediator.handleRequest(channel, request);
+        Response response = new Response();
+        
+        Class<?> interfaceClass = request.getInterfaceClass();
+
+        response.setRequestId(request.getRequestId());
+        
+        Object providerInstance = providerContainer.getProvider(interfaceClass);
+        
+        if (providerInstance == null) {
+            response.setResult(new PetiteException("No Provider For " + request.getClass().getName()));
+            channel.write(response);
+            return null;
+        }
+        
+        MethodAccess methodAccess = methodAccessCache.computeIfAbsent(interfaceClass, key -> MethodAccess.get(key));
+        try {
+            Object result = methodAccess.invoke(providerInstance, request.getMethodName(), request.getArgs());
+            response.setResult(result);
+        } catch (Throwable t) {
+            response.setResult(t);
+        }
+        
+        channel.write(response);
 		return null;
 	}
 	
 	@Override
 	protected Void getFallback() {
+
 		Response response = new Response();
 		response.setRequestId(request.getRequestId());
-		response.setResult(new PetiteException("Call limited"));
+		
+        Object providerInstance = providerContainer.getProvider(request.getInterfaceClass());
+        
+        if (providerInstance == null) {
+            response.setResult(new PetiteException("No Provider For " + request.getClass().getName()));
+            channel.write(response);
+            return null;
+        }
+        
+        Provider providerAnnotation = providerInstance.getClass().getAnnotation(Provider.class);
+        
+        boolean degradation = providerAnnotation.degradation();
+        
+        if (degradation) {
+        		MethodAccess methodAccess = methodAccessCache.computeIfAbsent(request.getInterfaceClass(), key -> MethodAccess.get(key));
+        		response.setResult(getMockResult(methodAccess, request.getMethodName()));
+        } else {
+        		response.setResult(new PetiteException("Call limited"));
+        }
+        
 		channel.write(response);
 		return null;
 	}
-
+	
+	
+	private Object getMockResult(MethodAccess methodAccess, String methodName) {
+		int methodIndex = methodAccess.getIndex(methodName);
+		Class<?> returnType = methodAccess.getReturnTypes()[methodIndex];
+		
+		if (returnType == void.class) {
+			return null;
+		} else if (returnType == int.class) {
+			return 0;
+		} else if (returnType == char.class) {
+			return ' ';
+		} else if (returnType == short.class) {
+			return (short)0;
+		} else if (returnType == byte.class) {
+			return (byte)0;
+		} else if (returnType == long.class) {
+			return 0;
+		} else if (returnType == boolean.class) {
+			return false;
+		} else if (returnType == float.class) {
+			return 0.0;
+		} else if (returnType == double.class) {
+			return 0.0;
+		}
+		
+		return null;
+	}
+	
+	
 }

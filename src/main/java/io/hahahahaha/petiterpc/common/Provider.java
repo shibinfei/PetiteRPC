@@ -15,4 +15,6 @@ public @interface Provider {
 
 	int threadCoreSize();
 	
+	boolean degradation();
+	
 }

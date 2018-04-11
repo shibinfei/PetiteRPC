@@ -2,7 +2,7 @@ package io.hahahahaha.petiterpc.test.provider;
 
 import io.hahahahaha.petiterpc.common.Provider;
 
-@Provider(threadCoreSize = 2)
+@Provider(threadCoreSize = 2, degradation = true)
 public class DemoProvider implements DemoInterface {
 
 	@Override
