@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.hahahahaha.petiterpc.common.Request;
-import io.hahahahaha.petiterpc.provider.ProviderMediator;
+import io.hahahahaha.petiterpc.provider.ProviderLimitTask;
 import io.hahahahaha.petiterpc.transport.TransportChannel;
 import io.hahahahaha.petiterpc.transport.netty.NettyChannel;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,8 +16,6 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  */
 public class ProviderHandler extends ChannelInboundHandlerAdapter {
 
-    private ProviderMediator serverMediator = new ProviderMediator();
-    
     private ExecutorService threadPool = Executors.newFixedThreadPool(4);
     
     @Override
@@ -34,7 +32,7 @@ public class ProviderHandler extends ChannelInboundHandlerAdapter {
 			
 			@Override
 			public void run() {
-				serverMediator.handleRequest(transportChannel, request);
+				new ProviderLimitTask(transportChannel, request).execute();
 			}
 		});
     }
