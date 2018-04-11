@@ -29,6 +29,8 @@ public class Request implements Codable {
 	
 	private Object[] args;
 	
+	private Class<?>[] argTypes;
+	
 	private long requestId;
 	
 	private static final AtomicLong REQUEST_ID_GENERATOR = new AtomicLong(0);
@@ -67,6 +69,14 @@ public class Request implements Codable {
 	public String toString() {
 		return "Request [interfaceClass=" + interfaceClass + ", methodName=" + methodName + ", args="
 				+ Arrays.toString(args) + ", requestId=" + requestId + "]";
+	}
+
+	public Class<?>[] getArgTypes() {
+		return argTypes;
+	}
+
+	public void setArgTypes(Class<?>[] argTypes) {
+		this.argTypes = argTypes;
 	}
 
 	@Override
