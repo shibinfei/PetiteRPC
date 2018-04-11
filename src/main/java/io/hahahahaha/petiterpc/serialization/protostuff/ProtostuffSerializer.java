@@ -19,15 +19,7 @@ public class ProtostuffSerializer implements Serializer {
 	
 	@SuppressWarnings("unchecked")
 	private <T> Schema<T> getSchema(Class<T> clazz) {
-		Schema<T> schema = (Schema<T>) schemaCache.get(clazz);
-		
-		if (schema != null) {
-			return schema;
-		}
-		
-		schema = RuntimeSchema.createFrom(clazz);
-		schemaCache.put(clazz, schema);
-		return schema;
+		return (Schema<T>) schemaCache.computeIfAbsent(clazz, key -> RuntimeSchema.createFrom(clazz));
 	}
 	
 	@SuppressWarnings("unchecked")
