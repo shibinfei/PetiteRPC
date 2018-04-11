@@ -11,14 +11,15 @@ public class ConsumerDemo {
 	public static void main(String[] args) {
 		ConsumerContext context = new ConsumerContext();
 		context.setInterfaces(Arrays.asList(DemoInterface.class));
-		context.setRegistry(new ZookeeperRegistry("10.1.12.107:2181"));
+		context.setRegistry(new ZookeeperRegistry("10.1.5.101:2181"));
 		context.start();
 		
 		DemoInterface demo = context.getService(DemoInterface.class);
-		
-		for (int i = 0; i < 10; i++) {
-			String result = demo.fuck("hahah");
-			System.out.println(result);
+		for (int i = 0; i < 5; i++) {
+			new Thread(() -> {
+				String result = demo.fuck("hahah");
+				System.out.println(result);
+			}).start();
 		}
 		
 	}

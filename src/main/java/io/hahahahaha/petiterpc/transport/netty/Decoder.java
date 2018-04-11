@@ -5,6 +5,7 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 
 import io.hahahahaha.petiterpc.common.Codable;
+import io.hahahahaha.petiterpc.common.Heartbeat;
 import io.hahahahaha.petiterpc.common.Request;
 import io.hahahahaha.petiterpc.common.Response;
 import io.hahahahaha.petiterpc.serialization.Serializer;
@@ -57,17 +58,16 @@ public class Decoder extends ByteToMessageDecoder {
             byte[] bodyBytes = new byte[bodySize];
             in.readBytes(bodyBytes);
 
-            Codable result;
+            Codable result = null;
             if (type == Codable.Type.REQUEST) {
                 result = serializer.deserialize(bodyBytes, Request.class);
-                out.add(result);
             } else if (type == Codable.Type.RESPONSE) {
                 result = serializer.deserialize(bodyBytes, Response.class);
-                out.add(result);
-            } else {
-                // 
+            } else if (type == Codable.Type.HEARTBEAT) {
+                result = serializer.deserialize(bodyBytes, Heartbeat.class);
             }
 
+            out.add(result);
             state = State.HEADER;
         }
 
